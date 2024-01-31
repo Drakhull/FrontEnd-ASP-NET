@@ -160,51 +160,52 @@
         });
 
         function confirmarCadastro() {
-            // Coletar dados do formulário
-            var formData = {
-                name: $('#name').val(),
-                email: $('#exampleFormControlInput1').val(),
-                password: $('#password').val(),
-                profile: $('#exampleFormControlSelect1').val(),
-                cpf: $('#cpf').val(),
-                logradouro: $('#logradouro').val(),
-                complemento: $('#complemento').val(),
-                numero: $('#numero').val(),
-                cidade: $('#cidade').val(),
-                estado: $('#estado').val(),
-                pais: $('#pais').val(),
-                cep: $('#cep').val(),
-                birthday: $('#birthday').val(),
-                phones: []
+        var formData = {
+            name: $('#name').val(),
+            email: $('#exampleFormControlInput1').val(),
+            password: $('#password').val(),
+            profile: $('#exampleFormControlSelect1').val(),
+            cpf: $('#cpf').val(),
+            logradouro: $('#logradouro').val(),
+            complemento: $('#complemento').val(),
+            numero: $('#numero').val(),
+            cidade: $('#cidade').val(),
+            estado: $('#estado').val(),
+            pais: $('#pais').val(),
+            cep: $('#cep').val(),
+            birthday: formatDate($('#birthday').val()),
+            phones: []
+        };
+
+        $('.phone-row').each(function () {
+            var phone = {
+                phoneNumber: $(this).find('.form-group.col-md-6 input').val(),
+                phoneType: $(this).find('.form-group.col-md-5 select').val()
             };
+            formData.phones.push(phone);
+        });
 
-            // Coletar dados dos telefones
-            $('.phone-row').each(function () {
-                var phone = {
-                    phoneNumber: $(this).find('.form-group.col-md-6 input').val(),
-                    phoneType: $(this).find('.form-group.col-md-5 select').val()
-                };
-                formData.phones.push(phone);
-            });
+        
+        $.ajax({
+            type: 'POST',
+            url: '/Users/CreateConfirmation',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                console.log(response);
+                window.location.href = '/Users/Index';
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
 
-            // Enviar requisição POST
-            $.ajax({
-                type: 'POST',
-                url: '/Users/Create', // Rota para o método Create no UsersController
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                success: function (response) {
-                    // Lógica de sucesso
-                    console.log(response);
-                    window.location.href = '/Users/Index'; // Redirecionar para a página de listagem de usuários
-                },
-                error: function (error) {
-                    // Lógica de tratamento de erro
-                    console.error(error);
-                }
-            });
+        function formatDate(inputDate) {
+            var date = new Date(inputDate);
+            var formattedDate = date.toISOString().split('T')[0];
+            return formattedDate;
         }
-
     </script>
 </body>
 </html>
