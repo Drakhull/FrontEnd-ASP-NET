@@ -1,0 +1,22 @@
+﻿@{
+    string userId = ViewData["UserId"].ToString();
+    string userName = ViewData["UserName"].ToString();
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação de Exclusão</title>
+</head>
+<body>
+    <div class="text-center">
+        <h1>Deseja realmente apagar o usuário "@userName"?</h1>
+
+        <a href="@Url.Action("Detail", "Users", new { id = userId })" class="btn btn-secondary" role="button">Voltar</a>
+
+        <a href="@Url.Action("Deleted", "Users", new { id = userId })" class="btn btn-danger" role="button">Excluir</a>
+    </div>
+</body>
+</html>

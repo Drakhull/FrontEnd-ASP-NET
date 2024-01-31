@@ -1,0 +1,210 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Cadastro de Usuários";
+}
+
+<html lang="pt-br">
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        /* Estilos para alinhar à direita */
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px; /* Ajuste conforme necessário */
+        }
+
+            .button-container a {
+                margin-left: 10px; /* Espaçamento entre os botões */
+            }
+    </style>
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="display-6">@ViewData["Title"]</h1>
+    </div>
+    <form id="userForm">
+        <div class="form-group">
+            <label for="name">Nome Completo</label>
+            <input type="text" class="form-control" placeholder="Insira seu nome completo">
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlInput1">E-mail</label>
+            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Insira seu endereço de e-mail">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" class="form-control" placeholder="Insira sua senha">
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Tipo de Perfil</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+                <option>Administrador</option>
+                <option>Supervisor</option>
+                <option>Operador</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="cpf">CPF</label>
+            <input type="text" class="form-control" id="cpf" placeholder="Insira seu CPF">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="logradouro">Logradouro</label>
+                <input type="text" class="form-control" placeholder="Insira o logradouro">
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="complemento">Complemento</label>
+                <input type="text" class="form-control" placeholder="Insira o complemento">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="numero">Número</label>
+                <input type="text" class="form-control" placeholder="Insira o número">
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="cidade">Cidade</label>
+                <input type="text" class="form-control" placeholder="Insira a cidade">
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="estado">Estado</label>
+                <input type="text" class="form-control" placeholder="Insira o estado ex: BA">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="pais">País</label>
+                <input type="text" class="form-control" placeholder="Insira o país">
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="cep">CEP</label>
+                <input type="text" class="form-control" placeholder="Insira o CEP">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="birthDate">Data de Aniversário</label>
+            <input type="date" class="form-control" id="birthday">
+        </div>
+
+        <div class="form-group">
+            <label for="phones"><strong>Telefones</strong></label>
+            <div id="phonesContainer">
+                <div class="form-row phone-row">
+                    <div class="form-group col-md-6">
+                        <label for="phoneNumber">Número</label>
+                        <input type="text" class="form-control" id="phoneNumber" placeholder="Insira com DDD e DDI ex: 5571912345678" maxlength="17">
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="phoneType">Tipo</label>
+                        <select class="form-control" name="phoneTypes[]">
+                            <option>Fixo</option>
+                            <option>Celular</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <button type="button" class="btn btn-danger" onclick="removePhone(this)">Remover</button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addPhone()">Adicionar Telefone</button>
+            <div class="button-container">
+                <a href="@Url.Action("")" class="btn btn-secondary" role="button">Voltar</a>
+                <a href="javascript:void(0);" class="btn btn-success" role="button" onclick="confirmarCadastro()">Confirmar</a>
+            </div>
+        </div>
+        
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        function addPhone() {
+            var phoneRow = $(".phone-row:first").clone();
+            phoneRow.find("input").val("");
+            $("#phonesContainer").append(phoneRow);
+            updateRemoveButtons();
+        }
+
+        function removePhone(button) {
+            if ($("#phonesContainer .phone-row").length > 1) {
+                $(button).closest('.phone-row').remove();
+            }
+            updateRemoveButtons();
+        }
+
+        function updateRemoveButtons() {
+            var removeButtons = $("#phonesContainer .phone-row .btn-danger");
+            removeButtons.prop('disabled', removeButtons.length === 1);
+        }
+        $(document).ready(function () {
+            $('#cpf').on('input', function () {
+                var cpf = $(this).val().replace(/\D/g, '');
+                cpf = cpf.substring(0, 11);
+            });
+        });
+
+        function confirmarCadastro() {
+            // Coletar dados do formulário
+            var formData = {
+                name: $('#name').val(),
+                email: $('#exampleFormControlInput1').val(),
+                password: $('#password').val(),
+                profile: $('#exampleFormControlSelect1').val(),
+                cpf: $('#cpf').val(),
+                logradouro: $('#logradouro').val(),
+                complemento: $('#complemento').val(),
+                numero: $('#numero').val(),
+                cidade: $('#cidade').val(),
+                estado: $('#estado').val(),
+                pais: $('#pais').val(),
+                cep: $('#cep').val(),
+                birthday: $('#birthday').val(),
+                phones: []
+            };
+
+            // Coletar dados dos telefones
+            $('.phone-row').each(function () {
+                var phone = {
+                    phoneNumber: $(this).find('.form-group.col-md-6 input').val(),
+                    phoneType: $(this).find('.form-group.col-md-5 select').val()
+                };
+                formData.phones.push(phone);
+            });
+
+            // Enviar requisição POST
+            $.ajax({
+                type: 'POST',
+                url: '/Users/Create', // Rota para o método Create no UsersController
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    // Lógica de sucesso
+                    console.log(response);
+                    window.location.href = '/Users/Index'; // Redirecionar para a página de listagem de usuários
+                },
+                error: function (error) {
+                    // Lógica de tratamento de erro
+                    console.error(error);
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

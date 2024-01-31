@@ -1,0 +1,77 @@
+﻿@model ModelsJava.User
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Usuário</title>
+</head>
+<body>
+    <h2>Detalhes do Usuário</h2>
+
+    <dl>
+        <dt>Nome:</dt>
+        <dd>@Model.Name</dd>
+
+        <dt>Email:</dt>
+        <dd>@Model.Email</dd>
+
+        <dt>Senha:</dt>
+        <dd>@Model.Password</dd>
+
+        <dt>CPF:</dt>
+        <dd>@Model.Cpf</dd>
+
+        <dt>Data/hora de criação do cadastro:</dt>
+        <dd>@DateTime.Parse(Model.CreationDate).ToString("dd/MM/yyyy (HH:mm:ss)")</dd>
+
+        <dt>Data/hora de atualização do cadastro:</dt>
+        <dd>
+            @if (Model.UpdateDate != null)
+            {
+                @DateTime.Parse(Model.UpdateDate).ToString("dd/MM/yyyy (HH:mm:ss)")
+            }
+            @if (Model.UpdateDate == null)
+            {
+                <text>Sem registros de alteração</text>
+            }
+        </dd>
+
+        <dt>Data de nascimento:</dt>
+        <dd>@Model.BirthDate.ToString("dd/MM/yyyy")</dd>
+
+        <dt>Telefones:</dt>
+        <dd>
+            @foreach (var phone in Model.PhoneNumbers)
+            {
+                <p>@phone.PhoneNumberPhoneNumber @phone.PhoneType</p>
+            }
+        </dd>
+
+        <dt>Perfil:</dt>
+        <dd>@Model.Profile</dd>
+
+        <dt>Endereço:</dt>
+        <dd>
+            <ul>
+                <li>Logradouro: @Model.Address.Logradouro</li>
+                <li>Complemento: @Model.Address.Complemento</li>
+                <li>Número: @Model.Address.Numero</li>
+                <li>Cidade: @Model.Address.Cidade</li>
+                <li>Estado: @Model.Address.Estado</li>
+                <li>País: @Model.Address.Pais</li>
+                <li>CEP: @Model.Address.Cep</li>
+            </ul>
+        </dd>
+    </dl>
+    <td><a href="@Url.Action("")" class="btn btn-secondary" role="button">Voltar</a></td>
+    <td><button type="button" class="btn btn-primary" role="button" onclick="location.href='@Url.Action("Update", "Users")'">Editar</button></td>
+    <td>
+        @Html.ActionLink("Excluir", "DeleteConfirmation", "Users", new { id = Model.IdUser, name = Model.Name }, new { @class = "btn btn-danger" })
+    </td>
+
+
+
+</body>
+</html>

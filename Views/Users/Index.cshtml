@@ -1,0 +1,60 @@
+﻿@model ModelsJava.User[]
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Lista de Usuários";
+}
+
+
+<html lang="pt-br">
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="text-center">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <a class="btn btn-primary" role="button" asp-controller="Users" asp-action="Create">Cadastrar novo usuário</a>
+        </div>
+        <h1 class="display-6">@ViewData["Title"]</h1>
+        <div class="container mt-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Perfil</th>
+                        <th>Data de Criação</th >
+                        <th>Data de Atualização</th>
+                        <th>Detalhes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.Name</td>
+                            <td>@user.Profile</td>
+                            <td>@DateTime.Parse(user.CreationDate).ToString("dd/MM/yyyy (HH:mm:ss)")</td>
+                            <td>
+                                @if (user.UpdateDate != null)
+                                {
+                                    @DateTime.Parse(user.UpdateDate).ToString("dd/MM/yyyy (HH:mm:ss)")
+                                }
+                                @if (user.UpdateDate == null)
+                                {
+                                    <text>Sem registros de alteração</text>
+                                }
+                            </td>
+                            <td><a href="@Url.Action("Detail", "Users", new { id = user.IdUser })" class="btn btn-info" role="button">Detalhar</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
